@@ -1,4 +1,4 @@
-const APP_VERSION='v0.1.0';
+const APP_VERSION='v0.1.2';
 const GAME_ID='dancing-criminal';
 const GAME_NAME='犯人は踊る';
 const MAX_PLAYERS=8;
@@ -39,4 +39,22 @@ function handlePending(){let p=me.state.pending;if(!p||!p.forMe){if(modalKey==='
 function pendingTarget(id){closeModal();act('pendingChoice',{targetId:id})}function pendingHidden(index){closeModal();act('pendingChoice',{index})}function ackPending(){closeModal();act('pendingChoice',{ack:true})}
 function showHistory(){let s=me.state;showModal(`<h2>公開履歴</h2><div class="history">${s.history.map((h,i)=>`<div class="hist">${i+1}. ${esc(h)}</div>`).join('')||'まだありません'}</div><div class="actions"><button class="btn secondary" onclick="closeModal()">閉じる</button></div>`)}
 function showResult(){let r=me.state.result;if(!r)return;showModal(`<h2>リザルト</h2><p class="bigmsg">${esc(r.reason)}</p><p><b>勝者：</b>${r.winners.map(esc).join(' / ')}</p><p><b>犯人カード最終所持：</b>${esc(r.criminalHolder||'なし')}</p><h3>最終手札</h3>${r.hands.map(x=>`<div class="player-row"><b>${esc(x.name)}</b><div class="result-cards">${x.cards.map(t=>`<span class="mini-card">${CARD_NAME[t]}</span>`).join('')||'なし'}</div></div>`).join('')}<h3>犯人カード移動履歴</h3><p>${r.criminalTrail.map(esc).join(' → ')||'記録なし'}</p><div class="actions">${me.state.isHost?`<button class="btn" onclick="closeModal();act('rematch')">もう一戦</button><button class="btn secondary" onclick="closeModal();act('backLobby')">ロビーへ戻る</button>`:'<span class="muted">ホストの選択を待っています</span>'}</div>`)}
-window.addEventListener('load',async()=>{let old=JSON.parse(localStorage.getItem('dancingCriminalSession')||'{}');if(old.room&&old.token&&old.name){me={...me,...old};try{await refresh();startPoll();return}catch{}}title()});
+window.addEventListener('load',async()=>{
+  // 先に必ずタイトルを描画する。再接続や通信に失敗しても白画面にしない。
+  await title();
+  let old={};
+  try{old=JSON.parse(localStorage.getItem('dancingCriminalSession')||'{}')||{}}catch{localStorage.removeItem('dancingCriminalSession')}
+  if(!(old.room&&old.token&&old.name))return;
+  me={...me,...old};
+  try{
+    const d=await api(`/api/room/${me.room}/state?token=${encodeURIComponent(me.token)}`);
+    me.state=d;
+    render();
+    startPoll();
+  }catch(e){
+    me={room:'',token:'',name:'',state:null,selected:null};
+    localStorage.removeItem('dancingCriminalSession');
+    await title();
+    toast('前回のROOMへ再接続できなかったため、ROOM一覧を表示しました');
+  }
+});

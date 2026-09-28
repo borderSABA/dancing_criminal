@@ -28,3 +28,7 @@ src/index.js
 [KNOWN]
 ・CPU v0.1は基本ランダム行動。推理AI強化は次段階。
 ・事件名はテキスト入力のみ。ゲーム内チャットは未実装。
+
+[v0.1.2]
+- Fixed blank screen when a saved reconnect session is stale or Worker access fails.
+- Title/ROOM screen is rendered before reconnect attempt.
