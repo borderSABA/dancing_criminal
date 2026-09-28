@@ -1,4 +1,4 @@
-const APP_VERSION='v0.1.4';
+const APP_VERSION='v0.2.0';
 const GAME_ID='dancing-criminal';
 const GAME_NAME='犯人は踊る';
 const MAX_PLAYERS=8;
@@ -51,20 +51,14 @@ async function boot(){
     me={...me,...old};
     try{
       const d=await api(`/api/room/${me.room}/state?token=${encodeURIComponent(me.token)}`);
-      me.state=d;
-      render();
-      startPoll();
+      me.state=d; render(); startPoll();
     }catch(e){
       me={room:'',token:'',name:'',state:null,selected:null};
       safeRemove(localStorage,'dancingCriminalSession');
       await title();
-      toast('前回のROOMへ再接続できなかったため、ROOM一覧を表示しました');
     }
   }catch(e){
-    const status=document.getElementById('bootStatus');
-    const err=document.getElementById('bootError');
-    if(status)status.textContent='ゲームの起動に失敗しました。';
-    if(err){err.textContent=(e&&e.stack)||String(e);err.style.display='block'}
+    console.error(e);
   }
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+boot();

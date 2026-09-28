@@ -1,46 +1,17 @@
 <!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>犯人は踊る ONLINE</title>
-  <link rel="stylesheet" href="./style.css?v=0.1.4">
-</head>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>犯人は踊る ONLINE</title><link rel="stylesheet" href="./style.css?v=0.2.0"></head>
 <body>
-  <div id="app">
-    <header class="top"><span></span><h1>犯人は踊る ONLINE</h1><span class="ver">v0.1.4</span></header>
-    <main class="page">
-      <div class="panel boot-panel">
-        <h2>犯人は踊る ONLINE</h2>
-        <p id="bootStatus">ゲームを起動しています…</p>
-        <p class="muted">v0.1.4では起動処理をindex.html内に同梱しています。</p>
-        <pre id="bootError" class="boot-error"></pre>
-      </div>
-    </main>
-  </div>
-  <div id="toast"></div>
-  <script>
-  window.__DANCING_BOOT_STARTED__ = false;
-  window.addEventListener('error', function(e){
-    var s=document.getElementById('bootStatus'), x=document.getElementById('bootError');
-    if(s)s.textContent='ゲームの起動中にJavaScriptエラーが発生しました。';
-    if(x){x.style.display='block';x.textContent=(e.message||'JavaScript error')+(e.filename?'\n'+e.filename+':'+e.lineno+':'+e.colno:'');}
-  });
-  window.addEventListener('unhandledrejection', function(e){
-    var s=document.getElementById('bootStatus'), x=document.getElementById('bootError');
-    if(s)s.textContent='ゲームの起動中に非同期エラーが発生しました。';
-    if(x){x.style.display='block';x.textContent=String(e.reason&&e.reason.stack||e.reason||'Unhandled rejection');}
-  });
-  setTimeout(function(){
-    if(!window.__DANCING_BOOT_STARTED__){
-      var s=document.getElementById('bootStatus'), x=document.getElementById('bootError');
-      if(s)s.textContent='ゲーム本体の起動を開始できませんでした。';
-      if(x){x.style.display='block';x.textContent='BOOT_NOT_STARTED (v0.1.4)';}
-    }
-  },3000);
-  </script>
-  <script>
-const APP_VERSION='v0.1.4';
+<div id="app">
+<header class="top"><span></span><h1>犯人は踊る ONLINE</h1><span class="ver">v0.2.0</span></header>
+<main class="page">
+<div class="name-row"><input class="input" maxlength="32" placeholder="プレイヤー名"><button class="btn">更新</button></div>
+<div class="rooms">
+<article class="panel room"><h2>ROOM 1</h2><div class="muted">接続確認中…</div></article>
+<article class="panel room"><h2>ROOM 2</h2><div class="muted">接続確認中…</div></article>
+<article class="panel room"><h2>ROOM 3</h2><div class="muted">接続確認中…</div></article>
+<article class="panel room"><h2>ROOM 4</h2><div class="muted">接続確認中…</div></article>
+</div></main></div><div id="toast"></div>
+<script>const APP_VERSION='v0.2.0';
 const GAME_ID='dancing-criminal';
 const GAME_NAME='犯人は踊る';
 const MAX_PLAYERS=8;
@@ -85,7 +56,6 @@ function pendingTarget(id){closeModal();act('pendingChoice',{targetId:id})}funct
 function showHistory(){let s=me.state;showModal(`<h2>公開履歴</h2><div class="history">${s.history.map((h,i)=>`<div class="hist">${i+1}. ${esc(h)}</div>`).join('')||'まだありません'}</div><div class="actions"><button class="btn secondary" onclick="closeModal()">閉じる</button></div>`)}
 function showResult(){let r=me.state.result;if(!r)return;showModal(`<h2>リザルト</h2><p class="bigmsg">${esc(r.reason)}</p><p><b>勝者：</b>${r.winners.map(esc).join(' / ')}</p><p><b>犯人カード最終所持：</b>${esc(r.criminalHolder||'なし')}</p><h3>最終手札</h3>${r.hands.map(x=>`<div class="player-row"><b>${esc(x.name)}</b><div class="result-cards">${x.cards.map(t=>`<span class="mini-card">${CARD_NAME[t]}</span>`).join('')||'なし'}</div></div>`).join('')}<h3>犯人カード移動履歴</h3><p>${r.criminalTrail.map(esc).join(' → ')||'記録なし'}</p><div class="actions">${me.state.isHost?`<button class="btn" onclick="closeModal();act('rematch')">もう一戦</button><button class="btn secondary" onclick="closeModal();act('backLobby')">ロビーへ戻る</button>`:'<span class="muted">ホストの選択を待っています</span>'}</div>`)}
 async function boot(){
-  window.__DANCING_BOOT_STARTED__=true;
   try{
     await title();
     let old={};
@@ -94,24 +64,16 @@ async function boot(){
     me={...me,...old};
     try{
       const d=await api(`/api/room/${me.room}/state?token=${encodeURIComponent(me.token)}`);
-      me.state=d;
-      render();
-      startPoll();
+      me.state=d; render(); startPoll();
     }catch(e){
       me={room:'',token:'',name:'',state:null,selected:null};
       safeRemove(localStorage,'dancingCriminalSession');
       await title();
-      toast('前回のROOMへ再接続できなかったため、ROOM一覧を表示しました');
     }
   }catch(e){
-    const status=document.getElementById('bootStatus');
-    const err=document.getElementById('bootError');
-    if(status)status.textContent='ゲームの起動に失敗しました。';
-    if(err){err.textContent=(e&&e.stack)||String(e);err.style.display='block'}
+    console.error(e);
   }
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-
-  </script>
-</body>
-</html>
+boot();
+</script>
+</body></html>
