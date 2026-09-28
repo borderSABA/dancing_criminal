@@ -4,3 +4,5 @@
 @media(max-width:700px){header{grid-template-columns:1fr auto;height:auto;min-height:58px;padding:6px 8px;gap:4px}#topMenu{grid-column:1 / 3;grid-row:2;width:100%;display:grid;grid-template-columns:repeat(4,1fr)}#topMenu button{padding:7px 3px;font-size:11px}header h1{grid-column:1;grid-row:1;justify-self:start;font-size:18px}#ver{grid-column:2;grid-row:1}.guideList>div{grid-template-columns:90px 1fr;font-size:14px}}
 
 #gamePop{position:fixed;left:50%;top:18%;transform:translate(-50%,-12px);z-index:60;max-width:min(90vw,720px);padding:14px 22px;border-radius:14px;background:#020617eF;border:2px solid #f8fafc;color:#fff;font-size:clamp(17px,3vw,24px);font-weight:800;text-align:center;box-shadow:0 12px 36px #000a;opacity:0;pointer-events:none;transition:.18s ease}#gamePop.show{opacity:1;transform:translate(-50%,0)}
+
+.player.me{box-shadow:inset 0 0 0 2px #60a5fa;background:#1e40af}.opponents .player{min-width:110px;text-align:center}
