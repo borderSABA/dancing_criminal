@@ -74,3 +74,16 @@
   .playerWrap{grid-template-rows:auto 32px}.usedCards{height:32px;max-height:32px!important;grid-template-rows:repeat(3,10px)}.usedCards span{height:10px;line-height:9px!important;font-size:6.5px!important}
   .effectStatus{padding:2px 4px}.effectStatus p{font-size:9px;line-height:10px}
 }
+
+/* v1.0.9 mobile used-card sizing: 4 visible rows + 2 reserved blank rows */
+@media (max-width:700px){
+  .playerWrap{grid-template-rows:auto 137px}
+  .usedCards{width:100%;height:137px;max-height:137px!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:repeat(6,22px)!important;gap:1px;margin-top:2px;overflow:hidden}
+  .usedCards span{display:flex!important;width:100%;max-width:none!important;min-width:0;height:22px!important;padding:2px 4px!important;line-height:17px!important;font-size:9px!important;align-items:center;justify-content:center;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .usedCards .reserveUsed{visibility:hidden}
+}
+@media (max-width:700px) and (max-height:700px){
+  .playerWrap{grid-template-rows:auto 137px}
+  .usedCards{height:137px;max-height:137px!important;grid-template-rows:repeat(6,22px)!important}
+  .usedCards span{height:22px!important;line-height:17px!important;font-size:9px!important}
+}
