@@ -1,34 +1,10 @@
-ゲーム名：犯人は踊る ONLINE
-バージョン：v0.1.0
+犯人は踊る ONLINE v0.1.3
 
-[CLIENT]
-index.html / style.css / app.js
-・固定ROOM1～4
-・PC ROOM4列 / スマホ2×2
-・ロビー待機
-・共通プレイヤー名 boardgamePlayerName
-・ゲーム開始時のみ共通名保存
-・標準 / ランダム / カスタムデッキ
-・CPU追加
-・手札秘密表示
-・公開履歴
-・リザルト / 最終手札 / 犯人カード移動履歴
-・再接続
+白画面対策:
+- index.htmlに静的な起動画面を追加。JavaScriptが起動しなくてもタイトルが表示される。
+- app.jsをdefer読み込みへ変更。
+- localStorage/sessionStorageアクセスを安全化。
+- 起動時の想定外例外を画面上に表示。
+- CSS/JSにv=0.1.3を付け、GitHub Pages/ブラウザの旧キャッシュを回避。
 
-[WORKER]
-src/index.js
-・Cloudflare Durable ObjectsでROOM状態を正本化
-・空ROOM作成時だけ共通管理Workerでホスト権限確認
-・ゲーム開始時だけ共通プレイ記録送信
-・第一発見者 / 犯人 / 探偵 / アリバイ / たくらみ / いぬ / 少年 / 目撃者 / 取り引き / 情報操作 / うわさ / 一般人
-・秘密情報は本人向けstateにだけ返却
-・カード効果処理途中も保存
-・CPU自動処理
-
-[KNOWN]
-・CPU v0.1は基本ランダム行動。推理AI強化は次段階。
-・事件名はテキスト入力のみ。ゲーム内チャットは未実装。
-
-[v0.1.2]
-- Fixed blank screen when a saved reconnect session is stale or Worker access fails.
-- Title/ROOM screen is rendered before reconnect attempt.
+Workerゲームロジックの変更なし。
