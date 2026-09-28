@@ -1,14 +1,14 @@
-const APP_VERSION='v0.2.1';
+const APP_VERSION='v0.3.0';
 const GAME_ID='dancing-criminal';
 const GAME_NAME='犯人は踊る';
 const MAX_PLAYERS=8;
 const COMMON_PLAYER_NAME_KEY='boardgamePlayerName';
 const NAME_DRAFT_KEY='dancingCriminalNameDraft';
-const DEFAULT_SERVER='https://dancing-criminal-online.naitoryo7110.workers.dev';
+const DEFAULT_SERVER=window.DANCING_CRIMINAL_CONFIG?.SERVER_URL||'https://dancing-criminal-online.naitoryo7110.workers.dev';
 function safeGet(storage,key){try{return storage.getItem(key)}catch{return null}}
 function safeSet(storage,key,value){try{storage.setItem(key,value)}catch{}}
 function safeRemove(storage,key){try{storage.removeItem(key)}catch{}}
-const SERVER_URL=safeGet(localStorage,'dancingCriminalServer')||DEFAULT_SERVER;
+const SERVER_URL=DEFAULT_SERVER.replace(/\/$/,'');
 const $=s=>document.querySelector(s), app=$('#app');
 let me={room:'',token:'',name:'',state:null,selected:null}, pollTimer=null, modalKey='';
 const CARD_DESC={
