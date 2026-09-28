@@ -8,3 +8,4 @@
 - CSS/JSにv=0.1.3を付け、GitHub Pages/ブラウザの旧キャッシュを回避。
 
 Workerゲームロジックの変更なし。
+v0.2.1: external app.js loading restored; ROOM API timeout/error handling; DO room id propagation fixed.
