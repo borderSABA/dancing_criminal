@@ -1,4 +1,4 @@
-const APP_VERSION='v0.1.3';
+const APP_VERSION='v0.1.4';
 const GAME_ID='dancing-criminal';
 const GAME_NAME='犯人は踊る';
 const MAX_PLAYERS=8;
